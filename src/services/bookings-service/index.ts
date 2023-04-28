@@ -30,7 +30,23 @@ async function getUserBooking(userId: number) {
   return userBooking;
 }
 
+async function alterRoomBooked(bookingId: number, roomId: number) {
+  if (bookingId === 0) throw forbiddenError();
+  const room = await roomsRepository.getRoomById(roomId);
+  if (!room) throw notFoundError();
+
+  const numBookings = await bookingsRepository.findAllBookingsWithRoomId(roomId);
+  if (numBookings >= room.capacity) throw forbiddenError();
+
+  try {
+    await bookingsRepository.alterBookedRoom(bookingId, roomId);
+  } catch (error) {
+    throw forbiddenError();
+  }
+}
+
 export default {
   insertNewBooking,
   getUserBooking,
+  alterRoomBooked,
 };

@@ -29,8 +29,23 @@ function findBookingRoomDataByUserId(userId: number) {
   });
 }
 
+function alterBookedRoom(bookingId: number, roomId: number) {
+  return prisma.booking.update({
+    select: {
+      id: true,
+    },
+    data: {
+      roomId,
+    },
+    where: {
+      id: bookingId,
+    },
+  });
+}
+
 export default {
   insertNewBooking,
   findAllBookingsWithRoomId,
   findBookingRoomDataByUserId,
+  alterBookedRoom,
 };

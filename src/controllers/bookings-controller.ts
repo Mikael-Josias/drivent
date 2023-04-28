@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
 import bookingsService from '@/services/bookings-service';
 
@@ -18,6 +19,17 @@ export async function getBooking(req: AuthenticatedRequest, res: Response, next:
   try {
     const booking = await bookingsService.getUserBooking(userId);
     res.send(booking);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function alterBookedRoom(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  const { roomId } = req.body as Record<string, number>;
+  const bookingId = Number(req.params.bookingId) || 0;
+  try {
+    await bookingsService.alterRoomBooked(bookingId, roomId);
+    res.send({ bookingId });
   } catch (error) {
     next(error);
   }
