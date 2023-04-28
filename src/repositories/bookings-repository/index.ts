@@ -17,7 +17,20 @@ function findAllBookingsWithRoomId(roomId: number) {
   });
 }
 
+function findBookingRoomDataByUserId(userId: number) {
+  return prisma.booking.findFirst({
+    select: {
+      id: true,
+      Room: true,
+    },
+    where: {
+      userId,
+    },
+  });
+}
+
 export default {
   insertNewBooking,
   findAllBookingsWithRoomId,
+  findBookingRoomDataByUserId,
 };

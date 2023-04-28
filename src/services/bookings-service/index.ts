@@ -24,6 +24,13 @@ async function insertNewBooking(userId: number, roomId: number) {
   return { bookingId: newBooking.id };
 }
 
+async function getUserBooking(userId: number) {
+  const userBooking = await bookingsRepository.findBookingRoomDataByUserId(userId);
+  if (!userBooking) throw notFoundError();
+  return userBooking;
+}
+
 export default {
   insertNewBooking,
+  getUserBooking,
 };
